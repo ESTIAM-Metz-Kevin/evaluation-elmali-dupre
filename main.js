@@ -12,7 +12,10 @@ liste_des_buissons.forEach((cacher_les_buissons) => {
 });
 
 console.log("Variable liste_des_buissons: ", liste_des_buissons);
-console.log("liste_des_cases_de_la_grille \n", liste_des_cases_de_la_grille);
+console.log(
+  "Variable liste_des_cases_de_la_grille \n",
+  liste_des_cases_de_la_grille
+);
 
 function generation_aleatoire_des_pokemons(dictionnaire) {
   var pokemon_choisi_aléatoirement =
@@ -26,9 +29,10 @@ liste_des_cases_de_la_grille.forEach((caseElement) => {
   const { name, sprite } = nouveau_pokémon;
   let nameElement = document.createElement("span");
   nameElement.textContent = name;
-
   let imgElement = document.createElement("img");
   imgElement.src = sprite;
+  imgElement.className = "pokemon";
+  imgElement.style.zIndex = "auto";
   imgElement.alt = name;
   caseElement.appendChild(imgElement);
 
