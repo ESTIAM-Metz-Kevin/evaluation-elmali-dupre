@@ -6,7 +6,7 @@ let nomsDesPokemons = pokemon.map((pokemon) => pokemon);
 const listeDePaireDePokemon = nomsDesPokemons.concat(nomsDesPokemons);
 listeDePaireDePokemon.sort((pokemon) => 0.5 - Math.random());
 
-function createPokemon_ImageText(InfoPkmnACreer) {
+function createPokemon_ImageText(InfoPkmnACreer, pokemonAffiche = true) {
   const { name, sprite } = InfoPkmnACreer;
 
   let nomElement = document.createElement("span");
@@ -20,7 +20,7 @@ function createPokemon_ImageText(InfoPkmnACreer) {
   imgElement.alt = name;
 
   let infos_parents = document.createElement("div");
-  infos_parents.classList.add("pokemon_affiche");
+  pokemonAffiche && infos_parents.classList.add("pokemon_affiche");
   infos_parents.appendChild(nomElement);
   infos_parents.appendChild(imgElement);
 
@@ -86,6 +86,12 @@ function init_game(liste_grille_element, liste_pokemon_random) {
 
       if (pokemonActuel === premierPokemonAffiche.name) {
         AttribuerPokeballSiIdentiques();
+        console.log(pokemonActuel);
+        let pkmncapture = document.querySelector(".liste_pokemons_captures");
+
+        console.log(pkmncapture);
+
+        pkmncapture.appendChild(createPokemon_ImageText(pokemonActuel, false));
       } else {
         stopClick = true;
 
@@ -94,7 +100,6 @@ function init_game(liste_grille_element, liste_pokemon_random) {
           stopClick = false;
         }, 2000);
       }
-
       premierPokemonAffiche = undefined;
     });
   });
