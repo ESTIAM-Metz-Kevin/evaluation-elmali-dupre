@@ -18,7 +18,8 @@ console.log(
 );
 
 function generation_aleatoire_des_pokemons(dictionnaire) {
-  var pokemon_choisi_aléatoirement =
+  // dictionnaire.forEach(indexrandomnommeaprès) {
+  let pokemon_choisi_aléatoirement =
     dictionnaire[Math.floor(Math.random() * dictionnaire.length)];
   return pokemon_choisi_aléatoirement;
 }
