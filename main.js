@@ -20,10 +20,21 @@ function createPokemon_ImageText(InfoPkmnACreer) {
   imgElement.alt = name;
 
   let infos_parents = document.createElement("div");
+  infos_parents.classList.add("pokemon_affiche");
   infos_parents.appendChild(nomElement);
   infos_parents.appendChild(imgElement);
 
   return infos_parents;
+}
+
+function cacherLesPokemonsNonCaptureDesBuissons() {
+  document
+    .querySelectorAll(".pokemon_affiche")
+    .forEach((pokemon_affiche_element) => {
+      const parent = pokemon_affiche_element.parentElement;
+      parent.querySelector(".bush").style.display = "";
+      pokemon_affiche_element.remove();
+    });
 }
 
 function giveMePokemonAt(liste_pair, index) {
@@ -32,18 +43,28 @@ function giveMePokemonAt(liste_pair, index) {
 }
 
 function clique_sur_evenement(liste_grille_element, liste_pokemon_random) {
-  // let utilisation_en_cours = true;
+  let dernierPokemonClique = false;
   liste_grille_element.forEach((box_element, index) => {
     box_element.addEventListener("click", () => {
-      // while utilisation_en_cours ==
       const bushImgElement = box_element.querySelector(".bush");
       bushImgElement.style.display = "none";
-      // console.log("AHH");
-      const imagePokemonElement = createPokemon_ImageText(
-        giveMePokemonAt(liste_pokemon_random, index)
-      );
+
+      const pokemonActuel = giveMePokemonAt(liste_pokemon_random, index);
+      const imagePokemonElement = createPokemon_ImageText(pokemonActuel);
+
       box_element.appendChild(imagePokemonElement);
       console.log(imagePokemonElement);
+      if (dernierPokemonClique) {
+        if (pokemonActuel === dernierPokemonClique) {
+          box_element.appendChild(pokeball.png);
+        } else {
+          setTimeout(cacherLesPokemonsNonCaptureDesBuissons, 2000);
+          console.log("Les Pokémon sont différents.");
+        }
+      }
+
+      // Met à jour le dernier Pokémon cliqué
+      dernierPokemonClique = pokemonActuel;
     });
   });
 }
