@@ -42,10 +42,32 @@ function giveMePokemonAt(liste_pair, index) {
   return Pokemon;
 }
 
-function clique_sur_evenement(liste_grille_element, liste_pokemon_random) {
-  let dernierPokemonClique = false;
+function AttribuerPokeballSiIdentiques() {
+  document
+    .querySelectorAll(".pokemon_affiche")
+    .forEach((pokemon_affiche_element) => {
+      const img = document.createElement("img");
+      img.src = "./assets/pokeball.png";
+      img.classList.add("pokeball");
+
+      pokemon_affiche_element.parentElement.appendChild(img);
+      pokemon_affiche_element.remove();
+    });
+}
+
+function init_game(liste_grille_element, liste_pokemon_random) {
+  let premierPokemonAffiche;
+  let stopClick = false;
+
   liste_grille_element.forEach((box_element, index) => {
     box_element.addEventListener("click", () => {
+      if (stopClick) return;
+      // Si on clique sur le même buisson deux fois
+      if (premierPokemonAffiche && premierPokemonAffiche.index === index)
+        return;
+      // Si pokeball on ne fait rien car pokemon capturé
+      if (box_element.querySelector(".pokeball")) return;
+
       const bushImgElement = box_element.querySelector(".bush");
       bushImgElement.style.display = "none";
 
@@ -53,20 +75,29 @@ function clique_sur_evenement(liste_grille_element, liste_pokemon_random) {
       const imagePokemonElement = createPokemon_ImageText(pokemonActuel);
 
       box_element.appendChild(imagePokemonElement);
-      console.log(imagePokemonElement);
-      if (dernierPokemonClique) {
-        if (pokemonActuel === dernierPokemonClique) {
-          box_element.appendChild(pokeball.png);
-        } else {
-          setTimeout(cacherLesPokemonsNonCaptureDesBuissons, 2000);
-          console.log("Les Pokémon sont différents.");
-        }
+
+      if (!premierPokemonAffiche) {
+        premierPokemonAffiche = {
+          name: pokemonActuel,
+          index,
+        };
+        return;
       }
 
-      // Met à jour le dernier Pokémon cliqué
-      dernierPokemonClique = pokemonActuel;
+      if (pokemonActuel === premierPokemonAffiche.name) {
+        AttribuerPokeballSiIdentiques();
+      } else {
+        stopClick = true;
+
+        setTimeout(() => {
+          cacherLesPokemonsNonCaptureDesBuissons();
+          stopClick = false;
+        }, 2000);
+      }
+
+      premierPokemonAffiche = undefined;
     });
   });
 }
 
-clique_sur_evenement(liste_des_cases_de_la_grille, listeDePaireDePokemon);
+init_game(liste_des_cases_de_la_grille, listeDePaireDePokemon);
